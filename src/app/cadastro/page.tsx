@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 export default function SignupPage() {
   const [email, setEmail] = useState("");
@@ -30,9 +31,9 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex flex-col justify-center items-center h-screen">
       <form onSubmit={handleSubmit} className="w-full max-w-sm">
-        <h1 className="text-2xl font-semibold mb-6">Cadastrar</h1>
+        <h1 className="text-2xl font-semibold mb-6">Cadastrar-se</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <Input
           type="text"
@@ -62,6 +63,10 @@ export default function SignupPage() {
           Cadastrar
         </Button>
       </form>
+      <div className="flex gap-2 justify-between w-full max-w-sm mt-4">
+        <Link href="/login">Login</Link>
+        <Link href="/esqueci-senha">Esqueceu a senha?</Link>
+      </div>
     </div>
   );
 }

@@ -31,8 +31,13 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Incorrect password");
         }
 
-        // Retornar o id como string
-        return { id: user.id.toString(), email: user.email, name: user.name };
+        // Retornar o id como string e incluir o role do usuário
+        return {
+          id: user.id.toString(),
+          email: user.email,
+          name: user.name,
+          role: user.role,
+        };
       },
     }),
   ],
@@ -44,17 +49,20 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    async session({ session, token }) {
-      if (token) {
-        session.id = token.id;
-      }
-      return session;
-    },
+    // Atualizar o JWT com o role do banco de dados
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        const dbUser = await prisma.user.findUnique({
+          where: { email: user.email },
+        });
+        token.role = dbUser?.role || "USER"; // Atualizar o JWT com o role do banco de dados
       }
       return token;
+    },
+    // Adicionar o role à sessão
+    async session({ session, token }) {
+      session.user.role = token.role; // Garante que a sessão tenha o role atualizado
+      return session;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,

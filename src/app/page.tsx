@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import LogoutButton from "@/components/login/LogoutButton";
 import TrocaSenhaButton from "@/components/login/TrocaSenhaButton";
+import Link from "next/link";
 
 export default async function HomePage() {
   const session = await getServerSession(authOptions);
@@ -21,6 +22,10 @@ export default async function HomePage() {
       <div>
         <h1>Bem-vindo, {session.user?.name}!</h1>
         <h1>{session.user?.email}</h1>
+        <h1>{session.user?.role}</h1>
+      </div>
+      <div>
+        <Link href="/admin">Área de Administrador</Link>
       </div>
       <div>
         <TrocaSenhaButton />

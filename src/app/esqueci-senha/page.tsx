@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function EsqueciSenhaPage() {
   const [email, setEmail] = useState("");
@@ -27,7 +28,7 @@ export default function EsqueciSenhaPage() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex flex-col justify-center items-center h-screen">
       <form onSubmit={handleSubmit} className="w-full max-w-sm">
         <h1 className="text-2xl font-semibold mb-6">Esqueci Minha Senha</h1>
         {message && <p className="mb-4 text-green-600">{message}</p>}
@@ -39,11 +40,15 @@ export default function EsqueciSenhaPage() {
           required
           className="mb-4 "
         />
-        <Button type="submit" className="bg-red-800 hover:bg-red-900">
+        <Button type="submit" className="bg-red-800 hover:bg-red-900 w-full">
           {" "}
           Enviar link de redefinição
         </Button>
       </form>
+      <div className="flex gap-2 justify-between w-full max-w-sm mt-4">
+        <Link href="/login">Login</Link>
+        <Link href="/cadastro">Cadastrar-se</Link>
+      </div>
     </div>
   );
 }

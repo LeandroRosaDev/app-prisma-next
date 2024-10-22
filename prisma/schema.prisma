@@ -14,4 +14,6 @@ model User {
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
+  role      String   @default("USER")  // Usar String para representar o nível de acesso
+
 }

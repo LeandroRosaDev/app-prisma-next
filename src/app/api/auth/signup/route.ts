@@ -12,7 +12,10 @@ export async function POST(request: Request) {
   });
 
   if (existingUser) {
-    return NextResponse.json({ error: "User already exists" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Usuário já Cadastrado" },
+      { status: 400 }
+    );
   }
 
   // Criar o novo usuário com a senha hasheada
@@ -23,6 +26,7 @@ export async function POST(request: Request) {
       email,
       name,
       password: hashedPassword,
+      role: "USER",
     },
   });
 

@@ -49,8 +49,8 @@ export default function LoginPage() {
           required
           className="mb-6"
         />
-        <Button type="submit" className="w-full">
-          Sign In
+        <Button type="submit" className="w-full bg-red-800 hover:bg-red-900">
+          Login
         </Button>
       </form>
     </div>

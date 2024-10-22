@@ -23,7 +23,6 @@ export default function SignupPage() {
 
     const data = await res.json();
     if (res.ok) {
-      // Redirecionar o usuário para a página de login
       router.push("/login");
     } else {
       setError(data.error || "Failed to create account");
@@ -59,7 +58,7 @@ export default function SignupPage() {
           required
           className="mb-6"
         />
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full bg-red-800 hover:bg-red-900">
           Cadastrar
         </Button>
       </form>

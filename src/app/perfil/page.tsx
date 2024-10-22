@@ -1,9 +1,8 @@
+// src/app/page.tsx
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import LogoutButton from "@/components/login/LogoutButton";
-import TrocaSenhaButton from "@/components/login/TrocaSenhaButton";
 
-export default async function HomePage() {
+export default async function Perfil() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -21,10 +20,6 @@ export default async function HomePage() {
       <div>
         <h1>Bem-vindo, {session.user?.name}!</h1>
         <h1>{session.user?.email}</h1>
-      </div>
-      <div>
-        <TrocaSenhaButton />
-        <LogoutButton />
       </div>
     </div>
   );

@@ -27,10 +27,7 @@ export default async function HomePage() {
       <div>
         <Link href="/admin">Área de Administrador</Link>
       </div>
-      <div>
-        <TrocaSenhaButton />
-        <LogoutButton />
-      </div>
+      <div></div>
     </div>
   );
 }

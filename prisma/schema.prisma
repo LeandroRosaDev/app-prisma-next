@@ -17,3 +17,40 @@ model User {
   role      String   @default("USER")  // Usar String para representar o nível de acesso
 
 }
+
+model Cliente {
+  id              Int      @id @default(autoincrement())
+  nome_cliente    String
+  nome_entrega    String
+  data_entrega    DateTime
+  logradouro      String
+  numero          String
+  bairro          String
+  cep             String
+  cidade          String
+  ponto_referencia String?
+  obs             String?
+  email           String
+  telefone_1      String
+  telefone_2      String?
+  nome_produto_1  String
+  nome_produto_2  String?
+  nome_produto_3  String?
+  nome_produto_4  String?
+  nome_produto_5  String?
+  desc_produto_1  String
+  desc_produto_2  String?
+  desc_produto_3  String?
+  desc_produto_4  String?
+  desc_produto_5  String?
+  qtd_1           String
+  qtd_2           String?
+  qtd_3           String?
+  qtd_4           String?
+  qtd_5           String?
+  forma_pagamento String
+  numero_parcelas String
+  cpf             String     
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}

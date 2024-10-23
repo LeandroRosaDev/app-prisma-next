@@ -7,15 +7,21 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  SidebarFooter,
+  SidebarHeader,
 } from "@/components/ui/sidebar";
 import {
   Home,
   Package,
-  Users,
   Settings,
   ClipboardList,
   Shield,
   LogOutIcon,
+  PackageSearch,
+  UserPlus2,
+  UserSearch,
+  MessageSquareWarning,
+  ListRestart,
 } from "lucide-react";
 import Link from "next/link";
 import LogoutButton from "./login/LogoutButton";
@@ -25,42 +31,35 @@ interface SidebarProps {
 }
 
 // Menu items comuns a todos os usuários
-const commonItems = [
+const produtos = [
   {
-    title: "Início",
-    url: "/",
-    icon: Home,
+    title: "Adicionar Produtos",
+    url: "/produtos/adicionar",
+    icon: Package,
   },
-  //   {
-  //     title: "Adicionar Produtos",
-  //     url: "/produtos/adicionar",
-  //     icon: Package,
-  //   },
-  //   {
-  //     title: "Visualizar Estoque",
-  //     url: "/produtos/estoque",
-  //     icon: Package,
-  //   },
-  //   {
-  //     title: "Visualizar Clientes",
-  //     url: "/clientes",
-  //     icon: Users,
-  //   },
-  //   {
-  //     title: "Adicionar Clientes",
-  //     url: "/clientes/adicionar",
-  //     icon: Users,
-  //   },
-  //   {
-  //     title: "Reclamações",
-  //     url: "/clientes/reclamacoes",
-  //     icon: LogOutIcon,
-  //   },
-  //   {
-  //     title: "Configurações",
-  //     url: "/configuracoes",
-  //     icon: Settings,
-  //   },
+  {
+    title: "Visualizar Estoque",
+    url: "/produtos/estoque",
+    icon: PackageSearch,
+  },
+];
+
+const clientes = [
+  {
+    title: "Visualizar Clientes",
+    url: "/cliente/listar",
+    icon: UserSearch,
+  },
+  {
+    title: "Adicionar Clientes",
+    url: "/cliente/adicionar",
+    icon: UserPlus2,
+  },
+  {
+    title: "Reclamações",
+    url: "/clientes/reclamacoes",
+    icon: MessageSquareWarning,
+  },
 ];
 
 // Menu items para moderadores e administradores
@@ -70,11 +69,11 @@ const moderatorAdminItems = [
     url: "/pedidos/entregas",
     icon: ClipboardList,
   },
-  //   {
-  //     title: "Atualizar Status",
-  //     url: "/pedidos/status",
-  //     icon: ClipboardList,
-  //   },
+  {
+    title: "Atualizar Status Pedidos",
+    url: "/pedidos/status",
+    icon: ListRestart,
+  },
 ];
 
 // Menu items exclusivos para administradores
@@ -88,14 +87,43 @@ const adminItems = [
 
 export function AppSidebar({ userRole }: SidebarProps) {
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <Home />
+              <Link href="/">Home</Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       <SidebarContent>
-        {/* Common Menu Items */}
+        {/* Produtos */}
         <SidebarGroup>
-          <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>
+          <SidebarGroupLabel>Produtos</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {commonItems.map((item) => (
+              {produtos.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <Link href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Clientes */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Clientes</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {clientes.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Link href={item.url}>
@@ -150,19 +178,23 @@ export function AppSidebar({ userRole }: SidebarProps) {
             </SidebarGroupContent>
           </SidebarGroup>
         )}
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <LogOutIcon />
-                  <LogoutButton />
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <Settings />
+              <Link href="/">Configurações</Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <LogOutIcon />
+              <LogoutButton />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }

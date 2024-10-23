@@ -22,12 +22,7 @@ export default async function HomePage() {
       <div>
         <h1>Bem-vindo, {session.user?.name}!</h1>
         <h1>{session.user?.email}</h1>
-        <h1>{session.user?.role}</h1>
       </div>
-      <div>
-        <Link href="/admin">Área de Administrador</Link>
-      </div>
-      <div></div>
     </div>
   );
 }

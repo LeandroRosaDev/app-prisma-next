@@ -1,6 +1,6 @@
 "use client";
 
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { useSession, SessionProvider } from "next-auth/react";
 import { ReactNode } from "react";
@@ -29,6 +29,7 @@ function SessionContent({ children }: { children: ReactNode }) {
       {!hideSidebar && (
         <SidebarProvider className="w-auto">
           <AppSidebar userRole={session?.user?.role} />
+          <SidebarTrigger className="mt-3" />
         </SidebarProvider>
       )}
       <main className="w-full">{children}</main>

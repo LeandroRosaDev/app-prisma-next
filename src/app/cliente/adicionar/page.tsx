@@ -55,8 +55,8 @@ export default function AddClientForm() {
           </div>
           <div className="flex-1">
             <Label htmlFor={`qtd_${i}`}>Qtd {i}</Label>
-            <Select defaultValue="1" id={`qtd_${i}`} name={`qtd_${i}`}>
-              <SelectTrigger>
+            <Select defaultValue="1">
+              <SelectTrigger id={`qtd_${i}`} name={`qtd_${i}`}>
                 <SelectValue placeholder="1" />
               </SelectTrigger>
               <SelectContent>
@@ -119,7 +119,7 @@ export default function AddClientForm() {
           variant: "destructive", // ou "error"
         });
       }
-    } catch (error) {
+    } catch {
       toast({
         title: "Erro",
         description: "Erro ao cadastrar cliente",
@@ -300,16 +300,12 @@ export default function AddClientForm() {
         {/* Forma de Pagamento */}
         <div>
           <Label htmlFor="forma_pagamento">Forma de Pagamento</Label>
-          <Select
-            defaultValue="selecionar"
-            id="forma_pagamento"
-            name="forma_pagamento"
-          >
-            <SelectTrigger>
+          <Select defaultValue="selecionar">
+            <SelectTrigger id="forma_pagamento" name="forma_pagamento">
               <SelectValue placeholder="Selecione" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="boleto">Boleto</SelectItem>
+              <SelectItem value="boleto">Cartão de Débito</SelectItem>
               <SelectItem value="cartao_credito">Cartão de Crédito</SelectItem>
               <SelectItem value="pix">Pix</SelectItem>
             </SelectContent>
@@ -319,8 +315,8 @@ export default function AddClientForm() {
         {/* Número de Parcelas */}
         <div>
           <Label htmlFor="numero_parcelas">Nº de Parcelas</Label>
-          <Select defaultValue="1" id="numero_parcelas" name="numero_parcelas">
-            <SelectTrigger>
+          <Select defaultValue="1">
+            <SelectTrigger id="numero_parcelas" name="numero_parcelas">
               <SelectValue placeholder="1" />
             </SelectTrigger>
             <SelectContent>
@@ -339,10 +335,10 @@ export default function AddClientForm() {
 
       {/* Botões de ação */}
       <div className="flex gap-4">
-        <Button type="reset" className="bg-red-500 text-white">
+        <Button type="reset" variant="destructive">
           Resetar
         </Button>
-        <Button type="submit" className="bg-green-500 text-white">
+        <Button type="submit" className="">
           {isSubmitting ? "Cadastrando..." : "Cadastrar"}
         </Button>
       </div>

@@ -22,6 +22,8 @@ import {
   UserSearch,
   MessageSquareWarning,
   ListRestart,
+  Calculator,
+  Truck,
 } from "lucide-react";
 import Link from "next/link";
 import LogoutButton from "./login/LogoutButton";
@@ -62,6 +64,19 @@ const clientes = [
   },
 ];
 
+const ferramentas = [
+  {
+    title: "Áreas de Entrega",
+    url: "/",
+    icon: Truck,
+  },
+  {
+    title: "Calculadora de Preço",
+    url: "/",
+    icon: Calculator,
+  },
+];
+
 // Menu items para moderadores e administradores
 const moderatorAdminItems = [
   {
@@ -70,7 +85,7 @@ const moderatorAdminItems = [
     icon: ClipboardList,
   },
   {
-    title: "Atualizar Status Pedidos",
+    title: "Atualizar Pedidos",
     url: "/",
     icon: ListRestart,
   },
@@ -87,7 +102,7 @@ const adminItems = [
 
 export function AppSidebar({ userRole }: SidebarProps) {
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" className="print:hidden">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -152,7 +167,31 @@ export function AppSidebar({ userRole }: SidebarProps) {
                       <Link href={item.url}>
                         <item.icon />
                         <span>{item.title}</span>
-                        <span className="border rounded-sm bg-black text-white ">
+                        <span className="border rounded-sm bg-black text-white p-[2px]">
+                          Breve
+                        </span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
+
+        {/* Ferramentas*/}
+        {(userRole === "MODERATOR" || userRole === "ADMIN") && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Ferramentas</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {ferramentas.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                        <span className="border rounded-sm bg-black text-white p-[2px]">
                           Breve
                         </span>
                       </Link>

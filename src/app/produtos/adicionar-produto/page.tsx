@@ -50,7 +50,7 @@ export default function PostProduto() {
   const [situacao, setSituacao] = useState("");
   const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
   const [subcategoriaSelecionada, setSubCategoriaSelecionada] = useState("");
-  const [preco, setPreco] = useState(0);
+  const [preco] = useState(0);
   const [images, setImages] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
@@ -225,14 +225,14 @@ export default function PostProduto() {
         </Select>
 
         {/* Preço */}
-        <Input
+        {/* <Input
           type="number"
           id="preco"
           placeholder="Preço"
           value={preco}
           onChange={(e) => setPreco(parseFloat(e.target.value) || 0)}
           {...register("preco")}
-        />
+        /> */}
 
         {/* Altura */}
         <Input

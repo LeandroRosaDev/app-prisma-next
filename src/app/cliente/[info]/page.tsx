@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,15 +33,15 @@ export default function ClienteInfo({ params }: { params: Params }) {
   const { data: session } = useSession();
   const { toast } = useToast();
 
-  // Fetch cliente data
-  const fetchCliente = async () => {
+  // Função para buscar os dados do cliente, envolvida em useCallback
+  const fetchCliente = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await fetch(`/api/clientes/cliente/${params.info}`); // Caminho correto
       const data = await response.json();
       setCliente(data); // Preenche o estado de cliente
       setFormData(data); // Preenche o formData com os dados atuais do cliente
-    } catch (error) {
+    } catch {
       toast({
         title: "Erro",
         description: "Erro ao buscar os dados do cliente",
@@ -50,12 +50,12 @@ export default function ClienteInfo({ params }: { params: Params }) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [params.info, toast]);
 
   // Efeito para carregar os dados do cliente
   useEffect(() => {
     if (params.info) fetchCliente();
-  }, [params.info]);
+  }, [params.info, fetchCliente]); // Agora, `fetchCliente` está na lista de dependências
 
   // Função para atualizar os dados do cliente
   const handleUpdateCliente = async () => {
@@ -85,7 +85,7 @@ export default function ClienteInfo({ params }: { params: Params }) {
           variant: "destructive",
         });
       }
-    } catch (error) {
+    } catch {
       toast({
         title: "Erro",
         description: "Erro ao atualizar os dados do cliente",
@@ -231,7 +231,7 @@ export default function ClienteInfo({ params }: { params: Params }) {
       {/* Alerta de permissão */}
       {session?.user?.role !== "MODERATOR" &&
         session?.user?.role !== "ADMIN" && (
-          <Alert variant="warning" className="mt-4">
+          <Alert variant="destructive" className="mt-4">
             <AlertTitle>Permissão Negada</AlertTitle>
             <AlertDescription>
               Somente moderadores ou administradores podem editar as informações

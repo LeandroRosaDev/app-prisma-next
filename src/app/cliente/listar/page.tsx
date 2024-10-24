@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Table, TableCell, TableRow } from "@/components/ui/table";
@@ -15,9 +15,29 @@ import { LucideTrash2, LucideEye } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+
+// Definir o tipo de cliente
+interface Cliente {
+  id: number;
+  nome_cliente: string;
+  forma_pagamento: string;
+  cidade: string;
+  bairro: string;
+  subtotal?: string; // Subtotal pode ser undefined
+}
 
 export default function ListarClientes() {
-  const [clientes, setClientes] = useState([]);
+  const [clientes, setClientes] = useState<Cliente[]>([]); // Tipagem correta
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [filters, setFilters] = useState({
@@ -28,44 +48,51 @@ export default function ListarClientes() {
   const { data: session } = useSession();
   const { toast } = useToast();
 
-  // Função para buscar clientes com filtros e paginação
-  const fetchClientes = async (page = 1) => {
-    try {
-      const queryParams = new URLSearchParams({
-        page: page.toString(),
-        cidade: filters.cidade || "",
-        bairro: filters.bairro || "",
-        forma_pagamento:
-          filters.forma_pagamento === "all" ? "" : filters.forma_pagamento, // Se for "all", não aplicamos o filtro
-      });
-      const response = await fetch(`/api/clientes/buscar?${queryParams}`);
-      const data = await response.json();
+  // Estado para controlar o alert de exclusão
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [clienteToDelete, setClienteToDelete] = useState<Cliente | null>(null);
 
-      if (response.ok) {
-        setClientes(data.clientes);
-        setTotalPages(data.totalPages);
-        setCurrentPage(page);
-      } else {
+  // Função para buscar clientes com filtros e paginação
+  const fetchClientes = useCallback(
+    async (page = 1) => {
+      try {
+        const queryParams = new URLSearchParams({
+          page: page.toString(),
+          cidade: filters.cidade || "",
+          bairro: filters.bairro || "",
+          forma_pagamento:
+            filters.forma_pagamento === "all" ? "" : filters.forma_pagamento, // Se for "all", não aplicamos o filtro
+        });
+        const response = await fetch(`/api/clientes/buscar?${queryParams}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          setClientes(data.clientes);
+          setTotalPages(data.totalPages);
+          setCurrentPage(page);
+        } else {
+          toast({
+            title: "Erro",
+            description: data.error,
+            variant: "destructive",
+          });
+        }
+      } catch {
         toast({
           title: "Erro",
-          description: data.error,
+          description: "Erro ao buscar clientes",
           variant: "destructive",
         });
       }
-    } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Erro ao buscar clientes",
-        variant: "destructive",
-      });
-    }
-  };
+    },
+    [filters, toast]
+  );
 
   // Função para deletar um cliente
-  const deleteCliente = async (id: number) => {
+  const deleteCliente = async () => {
     if (session?.user?.role !== "ADMIN") return;
 
-    if (!confirm("Tem certeza que deseja deletar este cliente?")) return;
+    if (!clienteToDelete) return;
 
     try {
       const response = await fetch("/api/clientes/deletar", {
@@ -73,7 +100,7 @@ export default function ListarClientes() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id }),
+        body: JSON.stringify({ id: clienteToDelete.id }),
       });
       const data = await response.json();
 
@@ -84,6 +111,7 @@ export default function ListarClientes() {
           variant: "default",
         });
         fetchClientes(currentPage); // Atualizar a lista de clientes
+        setIsAlertOpen(false); // Fechar o AlertDialog
       } else {
         toast({
           title: "Erro",
@@ -91,7 +119,7 @@ export default function ListarClientes() {
           variant: "destructive",
         });
       }
-    } catch (error) {
+    } catch {
       toast({
         title: "Erro",
         description: "Erro ao deletar cliente",
@@ -103,8 +131,7 @@ export default function ListarClientes() {
   // Efeito para buscar clientes quando o filtro ou a página mudar
   useEffect(() => {
     fetchClientes(currentPage);
-    // Somente atualiza quando os filtros ou a página mudam
-  }, [filters, currentPage]);
+  }, [fetchClientes, filters, currentPage]);
 
   return (
     <div className="p-6">
@@ -136,18 +163,13 @@ export default function ListarClientes() {
             <SelectValue placeholder="Forma de Pagamento" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todas</SelectItem>{" "}
-            {/* Aqui substitui "" por "all" */}
-            <SelectItem value="boleto">Boleto</SelectItem>
+            <SelectItem value="all">Todas</SelectItem>
             <SelectItem value="cartao_credito">Cartão de Crédito</SelectItem>
             <SelectItem value="pix">Pix</SelectItem>
           </SelectContent>
         </Select>
 
-        <Button
-          onClick={() => fetchClientes(1)}
-          className="bg-blue-500 text-white"
-        >
+        <Button onClick={() => fetchClientes(1)} className="">
           Filtrar
         </Button>
       </div>
@@ -177,19 +199,23 @@ export default function ListarClientes() {
                   <div className="flex gap-2">
                     <Button variant="ghost">
                       <Link href={`/cliente/${cliente.id}`}>
-                        {" "}
                         <LucideEye size={20} />
                       </Link>
                     </Button>
 
                     {session?.user?.role === "ADMIN" && (
-                      <Button
-                        variant="ghost"
-                        onClick={() => deleteCliente(cliente.id)}
-                        className="text-red-500"
-                      >
-                        <LucideTrash2 size={20} />
-                      </Button>
+                      <>
+                        <Button
+                          variant="ghost"
+                          onClick={() => {
+                            setClienteToDelete(cliente);
+                            setIsAlertOpen(true); // Abrir o AlertDialog
+                          }}
+                          className="text-red-500"
+                        >
+                          <LucideTrash2 size={20} />
+                        </Button>
+                      </>
                     )}
                   </div>
                 </TableCell>
@@ -225,6 +251,26 @@ export default function ListarClientes() {
           Próxima
         </Button>
       </div>
+
+      {/* AlertDialog para confirmar a exclusão */}
+      <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar Exclusão</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza de que deseja deletar o cliente{" "}
+              <strong>{clienteToDelete?.nome_cliente}</strong>? Essa ação não
+              poderá ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={deleteCliente}>
+              Deletar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -94,10 +94,10 @@ export default function ClienteInfo({ params }: { params: Params }) {
     }
   };
 
-  if (isLoading) return <p>Carregando...</p>;
+  if (isLoading) return <p>Carregando...</p>; // Aqui que vai entrar o componente de loading
 
   // Verificação para garantir que o cliente não é null
-  if (!cliente) return <p>Cliente não encontrado.</p>;
+  if (!cliente) return <p>Cliente não encontrado.</p>; // Aqui pode entrar alguma parte de código melhor quando o cliente não for encontrado
 
   return (
     <div className="p-6">

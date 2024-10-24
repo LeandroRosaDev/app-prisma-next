@@ -1,6 +1,4 @@
-// src/app/api/auth/[...nextauth]/route.ts
-
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
 import { prisma } from "@/lib/prisma";
@@ -13,7 +11,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials): Promise<User | null> {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Please enter an email and password");
         }
@@ -36,8 +34,8 @@ export const authOptions: NextAuthOptions = {
           id: user.id.toString(),
           email: user.email,
           name: user.name,
-          role: user.role,
-        };
+          role: user.role, // Inclua o role como parte do retorno do user
+        } as User;
       },
     }),
   ],
@@ -61,7 +59,9 @@ export const authOptions: NextAuthOptions = {
     },
     // Adicionar o role à sessão
     async session({ session, token }) {
-      session.user.role = token.role; // Garante que a sessão tenha o role atualizado
+      if (session.user) {
+        session.user.role = token.role as string; // Certifique-se de fazer o cast corretamente
+      }
       return session;
     },
   },

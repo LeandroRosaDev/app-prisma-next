@@ -34,12 +34,12 @@ interface SidebarProps {
 const produtos = [
   {
     title: "Adicionar Produtos",
-    url: "/produtos/adicionar",
+    url: "/",
     icon: Package,
   },
   {
     title: "Visualizar Estoque",
-    url: "/produtos/estoque",
+    url: "/",
     icon: PackageSearch,
   },
 ];
@@ -57,7 +57,7 @@ const clientes = [
   },
   {
     title: "Reclamações",
-    url: "/clientes/reclamacoes",
+    url: "/",
     icon: MessageSquareWarning,
   },
 ];
@@ -66,12 +66,12 @@ const clientes = [
 const moderatorAdminItems = [
   {
     title: "Ver Relatórios",
-    url: "/pedidos/entregas",
+    url: "/",
     icon: ClipboardList,
   },
   {
     title: "Atualizar Status Pedidos",
-    url: "/pedidos/status",
+    url: "/",
     icon: ListRestart,
   },
 ];
@@ -110,6 +110,9 @@ export function AppSidebar({ userRole }: SidebarProps) {
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
+                      <span className="border rounded-sm bg-black text-white p-[2px] ">
+                        Breve
+                      </span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -149,6 +152,9 @@ export function AppSidebar({ userRole }: SidebarProps) {
                       <Link href={item.url}>
                         <item.icon />
                         <span>{item.title}</span>
+                        <span className="border rounded-sm bg-black text-white ">
+                          Breve
+                        </span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

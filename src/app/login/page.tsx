@@ -1,4 +1,3 @@
-// src/app/login/page.tsx
 "use client";
 
 import { signIn } from "next-auth/react";
@@ -6,11 +5,12 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { useToast } from "@/hooks/use-toast";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,9 +22,14 @@ export default function LoginPage() {
     });
 
     if (res?.error) {
-      setError(res.error);
+      // Exibir mensagem de erro através do Toast
+      toast({
+        title: "Erro no Login",
+        description: res.error,
+        variant: "destructive",
+      });
     } else {
-      // Redirecionar para a página inicial
+      // Redirecionar para a página inicial após o login bem-sucedido
       window.location.href = "/";
     }
   };
@@ -33,7 +38,6 @@ export default function LoginPage() {
     <div className="flex flex-col justify-center items-center h-screen">
       <form onSubmit={handleSubmit} className="w-full max-w-sm mb-4">
         <h1 className="text-2xl font-semibold mb-6">Login</h1>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
         <Input
           type="email"
           value={email}
@@ -50,7 +54,7 @@ export default function LoginPage() {
           required
           className="mb-6"
         />
-        <Button type="submit" className="w-full bg-red-800 hover:bg-red-900">
+        <Button type="submit" className="w-full">
           Login
         </Button>
       </form>

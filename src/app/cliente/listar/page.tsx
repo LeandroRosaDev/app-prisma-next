@@ -14,6 +14,7 @@ import {
 import { LucideTrash2, LucideEye } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
+import Link from "next/link";
 
 export default function ListarClientes() {
   const [clientes, setClientes] = useState([]);
@@ -175,8 +176,12 @@ export default function ListarClientes() {
                 <TableCell>
                   <div className="flex gap-2">
                     <Button variant="ghost">
-                      <LucideEye size={20} />
+                      <Link href={`/cliente/${cliente.id}`}>
+                        {" "}
+                        <LucideEye size={20} />
+                      </Link>
                     </Button>
+
                     {session?.user?.role === "ADMIN" && (
                       <Button
                         variant="ghost"

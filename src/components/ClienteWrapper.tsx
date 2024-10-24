@@ -22,7 +22,8 @@ function SessionContent({ children }: { children: ReactNode }) {
   const hideSidebar =
     pathname === "/login" ||
     pathname === "/cadastro" ||
-    pathname === "/esqueci-senha";
+    pathname === "/esqueci-senha" ||
+    pathname === "/erro-acesso";
 
   return (
     <div className="flex">

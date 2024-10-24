@@ -4,14 +4,15 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 
 export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const router = useRouter();
+  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +27,11 @@ export default function SignupPage() {
     if (res.ok) {
       router.push("/login");
     } else {
-      setError(data.error || "Failed to create account");
+      toast({
+        title: "Erro no Login",
+        description: data.error,
+        variant: "destructive",
+      });
     }
   };
 
@@ -34,7 +39,6 @@ export default function SignupPage() {
     <div className="flex flex-col justify-center items-center h-screen">
       <form onSubmit={handleSubmit} className="w-full max-w-sm">
         <h1 className="text-2xl font-semibold mb-6">Cadastrar-se</h1>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
         <Input
           type="text"
           value={name}
@@ -59,7 +63,7 @@ export default function SignupPage() {
           required
           className="mb-6"
         />
-        <Button type="submit" className="w-full bg-red-800 hover:bg-red-900">
+        <Button type="submit" className="w-full ">
           Cadastrar
         </Button>
       </form>

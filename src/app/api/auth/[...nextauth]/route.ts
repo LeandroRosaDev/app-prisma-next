@@ -23,12 +23,12 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!user) {
-          throw new Error("No user found with the email");
+          throw new Error("Email não encontrado.");
         }
 
         const isValid = await compare(credentials.password, user.password);
         if (!isValid) {
-          throw new Error("Incorrect password");
+          throw new Error("Verifique a sua senha e tente novamente.");
         }
 
         // Retornar o id como string e incluir o role do usuário

@@ -27,5 +27,11 @@ export async function middleware(req: NextRequest) {
 
 // Define as rotas que o middleware vai monitorar
 export const config = {
-  matcher: ["/admin/:path*", "/pedidos/:path*"],
+  matcher: [
+    "/admin/:path*",
+    "/pedidos/:path*",
+    "/cliente/:path*",
+    "/produtos/:path*",
+    "/trocar-senha/:path*",
+  ],
 };

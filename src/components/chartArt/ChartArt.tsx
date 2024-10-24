@@ -28,7 +28,7 @@ export function Component() {
   return (
     <ChartContainer
       config={chartConfig}
-      className="min-h-[200px] w-full h-[800px] border"
+      className="min-h-[200px] w-full max-w-[800px] h-[800px] border"
     >
       <BarChart accessibilityLayer data={chartData}>
         <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />

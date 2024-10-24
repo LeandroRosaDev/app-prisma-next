@@ -51,11 +51,9 @@ export default function AdminPage() {
 
   return (
     <div>
-      <h1>Painel do Administrador</h1>
-
       {message && <p className="mb-4 text-red-500">{message}</p>}
 
-      <table className="w-full table-auto">
+      <table className="table-auto m-6">
         <thead>
           <tr>
             <th className="px-4 py-2">Nome</th>
@@ -92,11 +90,7 @@ export default function AdminPage() {
                     </SelectContent>
                   </Select>
                 </td>
-                <td className="border px-4 py-2">
-                  <Button onClick={() => changeUserRole(user.id, "MODERATOR")}>
-                    Promover a Moderador
-                  </Button>
-                </td>
+                <td className="border px-4 py-2">excluir</td>
               </tr>
             )
           )}

@@ -135,8 +135,6 @@ export default function AddClientForm() {
       onSubmit={handleSubmit}
       className="flex items-center flex-col m-5 bg-white py-4 space-y-6"
     >
-      <h1 className="text-3xl font-medium text-gray-700">Cadastrar Cliente</h1>
-
       <div className="grid grid-cols-2 gap-6 w-full">
         {/* Nome do Cliente */}
         <div>

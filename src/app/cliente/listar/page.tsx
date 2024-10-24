@@ -135,8 +135,6 @@ export default function ListarClientes() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">Lista de Clientes</h1>
-
       {/* Filtros */}
       <div className="grid grid-cols-4 gap-4 mb-6">
         <Input

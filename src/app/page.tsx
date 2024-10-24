@@ -2,7 +2,6 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 import { Component } from "@/components/chartArt/ChartArt";
-import MenuSuspenso from "@/components/MenuSuspenso";
 
 export default async function HomePage() {
   const session = await getServerSession(authOptions);
@@ -20,7 +19,6 @@ export default async function HomePage() {
   return (
     <div className="flex flex-col justify-between m-5">
       <div>
-        <MenuSuspenso />
         <Component />
       </div>
     </div>
